@@ -1,11 +1,22 @@
+spring:
+  application:
+    name: service-discovery
+---
 server:
   port: ${PORT:8761}
-
+spring:
+  profiles: peer1
 eureka:
   instance:
-    hostname: localhost
+    hostname: peer1
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${spring.application.instance_id:${server.port}}
   client:
     registerWithEureka: false
     fetchRegistry: false
+    serviceUrl:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://discovery:${server.port}/eureka/
+      register-with-eureka: true
   server:
     enableSelfPreservation: false
